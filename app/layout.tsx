@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark">
         <section className="container mx-auto">
-        <header className="flex justify-between items-center p-4  sticky top-0 z-1 bg-card ">
+        <header className="flex justify-between items-center p-4  sticky top-0 z-10 bg-card ">
           <Link href={"/"}>
             <MountainIcon/>
           </Link>

@@ -1,8 +1,17 @@
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb"
+import Link from "next/link"
+
 export default function Playlist(){
     return(
-        <section>
-            <h3 className="font-bold text-3xl mb-2">Playlist</h3>
-            <div className="grid grid-cols-4 gap-4">
+        <section className="px-2 sm:px-0">
+            <Breadcrumb>
+            <BreadcrumbList className="text-3xl font-bold">
+                <BreadcrumbItem>
+                    <BreadcrumbLink href="/playlist" >Playlist</BreadcrumbLink>
+                </BreadcrumbItem>
+            </BreadcrumbList>
+            </Breadcrumb>
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
             <Collection/>
             <Collection/>
             <Collection/>
@@ -25,7 +34,10 @@ function Collection(){
     <div className="mt-4 text-sm">
     <p>Playlist Name</p>
     <div className="text-xs space-x-1"><span>creator name</span> <span>&#8226;</span> <span>playlist</span></div>
+    <Link href="/playlist/abc">
     <span className="text-xs">view playlist</span>
+    </Link>
+    
     </div>
     </div>
     
