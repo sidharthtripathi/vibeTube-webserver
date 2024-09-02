@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { DropdownMenuContent,DropdownMenu,DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MountainIcon } from "@/components/ui/MountainIcon";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -57,6 +58,7 @@ export default function RootLayout({
           </nav>
         </header>
         {children}
+        <Toaster/>
         </section>
         </ThemeProvider>
         </body>

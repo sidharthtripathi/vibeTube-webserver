@@ -1,48 +1,142 @@
-
+"use client"
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { MountainIcon } from "@/components/ui/MountainIcon"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { server } from '@/lib/axios'
+import { AxiosError } from 'axios'
+import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
+import { useToast } from "@/hooks/use-toast"
 
-export default function Component() {
+
+export default function Join() {
+  const { toast } = useToast()
+  const [isLogin, setIsLogin] = useState(true)
+  const [passwordHidden,togglePasswordVisibility] = useState(true)
+  const [password, setPassword] = useState('')
+  const [loading,setLoading] = useState(false)
+  const [username, setUsername] = useState('')
+
+  const handleSubmit = async(e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true);
+    if(isLogin){
+      try {
+        await server.post('/api/login',{username,password})
+      } catch (error) {
+        if(error instanceof AxiosError){
+          // error msg here
+          toast({title : error.response?.statusText,variant :"destructive"})
+        }
+      }
+      finally{
+        setLoading(false)
+      }
+    }
+    else{
+      try {
+        await server.post('/api/signup',{username,password})
+        toast({title :"Successfully Account Created"})
+        setIsLogin(true)
+      } catch (error) {
+        if(error instanceof AxiosError) toast({title : error.response?.statusText,variant : "destructive"})
+      }
+      finally{setLoading(false)}
+    }
+   
+  }
+
   return (
-    <div className="flex items-center justify-center bg-background">
-      <div className="w-full max-w-md rounded-lg bg-card p-6 shadow-lg">
-        <div className="flex flex-col items-center space-y-8">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary">
-            <MountainIcon className="h-10 w-10 text-primary-foreground" />
-          </div>
-          <div className="space-y-2 text-center">
-            <h2 className="text-3xl font-bold">Join with MetaTube Today</h2>
-            <p className="text-muted-foreground">Sign in to your account or create a new one to get started.</p>
-          </div>
-          <Button className="flex w-full items-center justify-center gap-3 px-6 py-3 rounded-md">
-            <ChromeIcon className="h-6 w-6" />
-            <span className="font-medium">Continue with Google</span>
-          </Button>
-        </div>
-      </div>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
+          <CardDescription>
+            {isLogin ? 'Welcome back! Please login to your account.' : 'Create a new account to get started.'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={isLogin ? 'login' : 'signup'} onValueChange={(value) => setIsLogin(value === 'login')}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            <TabsContent value="login">
+              <form onSubmit={handleSubmit}>
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className='flex items-center rounded-md py-1 px-2 focus-within:outline border'>
+                    <input
+                      className='border-0 bg-transparent flex-grow focus:outline-none border-none'
+                      id="password"
+                      type={passwordHidden ? "password" : "text"}
+                      value={password}
+                      
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    { passwordHidden?  <EyeClosedIcon className='cursor-pointer' onClick={()=>{togglePasswordVisibility(p=>!p)}}/> : <EyeOpenIcon className='cursor-pointer' onClick={()=>{togglePasswordVisibility(p=>!p)}}/> }
+                    </div>
+                   
+                  </div>
+                  <Button disabled = {loading} type="submit">Login</Button>
+                </div>
+              </form>
+            </TabsContent>
+            <TabsContent value="signup">
+              <form onSubmit={handleSubmit}>
+                <div className="grid gap-4">
+                  
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className='flex items-center rounded-md py-1 px-2 focus-within:outline border'>
+                    <input
+                      className='border-0 bg-transparent flex-grow focus:outline-none border-none'
+                      id="password"
+                      type={passwordHidden? "password" : "text"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    { passwordHidden?  <EyeClosedIcon onClick={()=>{togglePasswordVisibility(p=>!p)}} className='cursor-pointer' /> : <EyeOpenIcon onClick={()=>{togglePasswordVisibility(p=>!p)}} className='cursor-pointer'/> }
+                    </div>
+                  </div>
+                  <Button disabled = {loading} type="submit">Sign Up</Button>
+                </div>
+              </form>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-gray-500">
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <Button variant="link" className="p-0" onClick={() => setIsLogin(!isLogin)}>
+              {isLogin ? 'Sign Up' : 'Login'}
+            </Button>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
-  )
-}
-
-function ChromeIcon(props : any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="4" />
-      <line x1="21.17" x2="12" y1="8" y2="8" />
-      <line x1="3.95" x2="8.54" y1="6.06" y2="14" />
-      <line x1="10.88" x2="15.46" y1="21.94" y2="14" />
-    </svg>
   )
 }
