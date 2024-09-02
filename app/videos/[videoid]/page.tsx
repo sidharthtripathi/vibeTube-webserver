@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Video(){
     return (
     <div className="flex gap-4 p-4 items-start">
-        <div className="basis-2/3">
+        <div className="lg:basis-2/3">
             <video src="/vid.mp4" controls className="aspect-video rounded-md w-full"/>
             <div className="space-y-2">
                 <p className="line-clamp-2 font-bold text-2xl">This is the main video  title</p>
@@ -31,7 +31,7 @@ export default function Video(){
                 </p>
             </div>
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="hidden lg:grid grid-cols-1 gap-4">
             <VideoSuggestionCard/>
             <VideoSuggestionCard/>
             <VideoSuggestionCard/>
