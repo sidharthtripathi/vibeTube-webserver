@@ -6,25 +6,9 @@ import { Input } from "@/components/ui/input";
 import { ThemeProvider } from "@/components/theme-provider"
 import { DropdownMenuContent,DropdownMenu,DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MountainIcon } from "@/components/ui/MountainIcon";
 const inter = Inter({ subsets: ["latin"] });
-function MountainIcon(props : any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>
-  )
-}
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -62,8 +46,12 @@ export default function RootLayout({
                  </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>upload</DropdownMenuItem>
-              <DropdownMenuItem>logout</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={"/upload"}>upload</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/logout">logout</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           </nav>
