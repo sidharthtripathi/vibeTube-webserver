@@ -4,6 +4,8 @@ import "./globals.css";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { ThemeProvider } from "@/components/theme-provider"
+import { DropdownMenuContent,DropdownMenu,DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const inter = Inter({ subsets: ["latin"] });
 function MountainIcon(props : any) {
   return (
@@ -52,6 +54,18 @@ export default function RootLayout({
           <Link href="/playlist" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Playlist
           </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+                <Avatar className="size-8">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                   <AvatarFallback>CN</AvatarFallback>
+                 </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>upload</DropdownMenuItem>
+              <DropdownMenuItem>logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           </nav>
         </header>
         {children}
