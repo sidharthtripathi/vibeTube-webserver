@@ -1,8 +1,28 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] });
+function MountainIcon(props : any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+    </svg>
+  )
+}
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +36,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+        <section className="container mx-auto">
+        <header className="flex justify-between items-center p-4  sticky top-0 z-1 bg-card ">
+          <Link href={"/"}>
+            <MountainIcon/>
+          </Link>
+          
+          <nav className="space-x-8 flex items-center">
+          <Input placeholder="search" className="hidden sm:block" />
+          <Link href="/subscriptions" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+            Subscriptions
+          </Link>
+          <Link href="/playlist" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+            Playlist
+          </Link>
+          </nav>
+        </header>
+        {children}
+        </section>
+        </ThemeProvider>
+        </body>
     </html>
   );
 }
