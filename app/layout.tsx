@@ -8,6 +8,7 @@ import { DropdownMenuContent,DropdownMenu,DropdownMenuTrigger, DropdownMenuItem 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MountainIcon } from "@/components/ui/MountainIcon";
 import { Toaster } from "@/components/ui/toaster";
+import { SearchBox } from "@/components/ui/SearchBox";
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -32,7 +33,7 @@ export default function RootLayout({
           </Link>
           
           <nav className="space-x-8 flex items-center">
-          <Input placeholder="search" className="hidden sm:block" />
+          <SearchBox/>
           <Link href="/subscriptions" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Subscriptions
           </Link>
