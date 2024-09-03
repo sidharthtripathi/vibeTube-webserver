@@ -8,20 +8,25 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import {Progress} from '@/components/ui/progress'
+import { Label } from "@/components/ui/label"
 
 
 export default function Upload(){
     const router = useRouter()
     const [file,setFile] = useState<undefined | File>(undefined)
     const [vidSrc,setVidSrc] = useState<undefined | string>()
+    const [imageFile,setImageFile] = useState<undefined | File>(undefined)
+    const [imgSrc,setImgSrc] = useState<undefined | string>()
     const [title,setTitle] = useState("")
     const [description,setDescription] = useState("")
     const [loading,setLoading] = useState(false)
     const [progress,setProgress] = useState(0)
     async function handlePublish(){
         setLoading(true)
-        // getting presigned url
-        const {preSignedUrl,uploadedAt} = (await server.get('/api/upload')).data
+        // getting video presigned url
+        const {preSignedUrl,rawVideoUrl,hlsVideoUrl} = (await server.get('/api/upload')).data
+        // getting thumbnail presigned url
+        const {thumbnailUrl,preSignedUrl : thumbnailPresignedUrl} = (await server.get('/api/upload/thumbnail')).data
         // upload video file to the presigned url
         await axios.put(preSignedUrl,file,{
             onUploadProgress : (e)=>{
@@ -32,29 +37,45 @@ export default function Upload(){
                 
             }
         })
+
+        // upload thumbnail to presigned url
+        await axios.put(thumbnailPresignedUrl,imageFile)
+
         // update video in DB
-        await server.post('/api/upload',{title,description,url:uploadedAt})
+        await server.post('/api/upload',{title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl})
         setLoading(false)
         setTitle("")
         setDescription("")
         setFile(undefined)
         setVidSrc(undefined)
+        setImageFile(undefined)
+        setImgSrc(undefined)
         toast({title : "SUCEESS",description : "Video published"})
     }
     return (
         <div className="space-y-2 w-1/2">
-            <Input type="file" accept=".mp4" onChange={(e)=>{
+            <Label htmlFor="videofile">Select Video</Label>
+            <Input type="file" accept=".mp4" id="videofile"
+            onChange={(e)=>{
                 setFile(e.target.files?.[0])
                 setVidSrc(URL.createObjectURL(e.target.files?.[0] as File))
                 
             }} />
             {file? <video src={vidSrc} controls className="aspect-video w-full rounded-md"/> : undefined}
+            <Label htmlFor="thumbnailfile">Select thumbnail</Label>
+            <Input type="file" accept=".jpg" id="thumbnailfile"
+            onChange={(e)=>{
+                setImageFile(e.target.files?.[0])
+                setImgSrc(URL.createObjectURL(e.target.files?.[0] as File))
+                
+            }} />
+            {imageFile? <img src={imgSrc} className="aspect-video w-full rounded-md"/> : undefined}
             <div className="space-y-2">
                 <Input disabled = {loading} value={title} onChange={e=>setTitle(e.target.value)} type="text" placeholder="video title"/>
                 <Input disabled = {loading}  type="text" value={description} onChange={e=>{setDescription(e.target.value)}} placeholder="vidoe description"/>
             </div>
             
-            <Button onClick={handlePublish} disabled = {file==undefined || title==='' || description === '' || loading}>publish</Button>
+            <Button onClick={handlePublish} disabled = {file==undefined || imageFile===undefined || title==='' || description === '' || loading}>publish</Button>
             {!loading? undefined : <Progress value = {progress}/>}
         </div>
     )

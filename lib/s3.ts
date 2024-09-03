@@ -13,16 +13,25 @@ const s3 = new S3Client({
 
 const bucketName = process.env.BUCKETNAME;
 
-export async function getPutSignedURL(key: string = uuid()) {
+export async function getPutSignedURL(contentType:"video/mp4"|"image/jpeg",key: string = uuid(),) {
   try {
     const cmd = new PutObjectCommand({
       Bucket : bucketName,
-      Key : `metatube/${key}`,
-      ContentType : 'video/mp4'
+      Key : contentType==="video/mp4"? `metatube/${key}` : `thumbnail/${key}`,
+      ContentType : contentType
       
     })
     const preSignedUrl = await getSignedUrl(s3,cmd);
-    return {preSignedUrl,uploadedAt : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/metatube/${key}`};
+    if(contentType==="video/mp4")
+    return {
+      preSignedUrl,
+      rawVideoUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/metatube/${key}`,
+      hlsVideoUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/hls/${key}/playlist.m3u8`
+    };
+    else return {
+      preSignedUrl,
+      thumbnailUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/thumbnail/${key}`,
+    }
   } catch (error) {
     throw error;
   }
