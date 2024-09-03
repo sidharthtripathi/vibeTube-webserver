@@ -22,7 +22,7 @@ export async function getPutSignedURL(key: string = uuid()) {
       
     })
     const preSignedUrl = await getSignedUrl(s3,cmd);
-    return {preSignedUrl,uploadedAt : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/hls/${key}/playlist.m3u8`};
+    return {preSignedUrl,uploadedAt : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/metatube/${key}`};
   } catch (error) {
     throw error;
   }

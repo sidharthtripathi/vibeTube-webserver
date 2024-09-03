@@ -17,9 +17,9 @@ export function VideoCard(){
         <div className="mt-2 flex items-start gap-4">
         <Image src={"/profile.webp"} width={28} height={28} alt="profile" className="rounded-full size-10 object-cover"/>
           <div >
-          <div className="font-medium line-clamp-2">Introducing v0: Generative UI</div>
+          <Link href="/videos/abc" className="font-medium line-clamp-2">Introducing v0: Generative UI</Link>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="line-clamp-1">Vercel</div>
+            <Link href={"/channels/abc"} className="line-clamp-1">Vercel</Link>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="line-clamp-1">300K views</div>

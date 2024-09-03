@@ -52,6 +52,9 @@ export default function RootLayout({
                 <Link href={"/upload"}>upload</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
+                <Link href="/dashboard">dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/logout">logout</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
