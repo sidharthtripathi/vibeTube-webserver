@@ -9,9 +9,10 @@ import { server } from '@/lib/axios'
 import { AxiosError } from 'axios'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { useToast } from "@/hooks/use-toast"
-
+import { useRouter } from 'next/navigation'
 
 export default function Join() {
+  const router = useRouter()
   const { toast } = useToast()
   const [isLogin, setIsLogin] = useState(true)
   const [passwordHidden,togglePasswordVisibility] = useState(true)
@@ -33,6 +34,8 @@ export default function Join() {
       }
       finally{
         setLoading(false)
+        router.push('/')
+        
       }
     }
     else{

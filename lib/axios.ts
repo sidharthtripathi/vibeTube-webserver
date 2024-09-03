@@ -1,3 +1,5 @@
 import axios from "axios";
 
-export const server = axios.create()
+export const server = axios.create({
+    withCredentials : true
+})
