@@ -1,6 +1,6 @@
 import amqp from 'amqplib'
 import type {Connection,Channel} from 'amqplib'
-export async function sendToQueue(msg : {key:string}){
+export async function sendToQueue(msg : {rawVideoUrl:string}){
     let connection:Connection
     let channel:Channel
     try {

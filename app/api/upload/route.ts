@@ -23,7 +23,7 @@ export async function POST(req : NextRequest){
     const video = await prisma.video.create({
         data : {title,description,thumbnailUrl,rawVideoUrl,hlsVideoUrl,uploader:{connect : {username}}}
     })
-    await sendToQueue({key:rawVideoUrl})
+    await sendToQueue({rawVideoUrl})
     return NextResponse.json(video)
 }
 
