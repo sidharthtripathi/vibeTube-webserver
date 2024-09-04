@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function VideoCard(){
+export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id} : {thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string,id:string}){
     return (
         <div className="p-2">
         <div className="relative">
           <Image
-            src="/thumbnail.jpg"
+            src={thumbnailUrl}
             alt="Thumbnail"
             width={320}
             height={180}
@@ -15,15 +15,15 @@ export function VideoCard(){
           <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded-md">12:34</div>
         </div>
         <div className="mt-2 flex items-start gap-4">
-        <Image src={"/profile.webp"} width={28} height={28} alt="profile" className="rounded-full size-10 object-cover"/>
+        <Image src={avatar} width={28} height={28} alt="profile" className="rounded-full size-10 object-cover"/>
           <div >
-          <Link href="/videos/abc" className="font-medium line-clamp-2">Introducing v0: Generative UI</Link>
+          <Link href={`videos/${id}`} className="font-medium line-clamp-2">{title}</Link>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href={"/channels/abc"} className="line-clamp-1">Vercel</Link>
+            <Link href={`/channels/${username}`} className="line-clamp-1">{username}</Link>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="line-clamp-1">300K views</div>
-            <div className="line-clamp-1">5 days ago</div>
+            <div className="line-clamp-1">{views} views</div>
+            <div className="line-clamp-1">{createdAt.toISOString()}</div>
           </div>
           </div>
          

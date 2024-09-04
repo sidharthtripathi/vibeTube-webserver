@@ -45,7 +45,7 @@ export default async function Video({params} : {params : {videoid:string}}){
     return (
     <div className="flex gap-4 p-4 items-start">
         <div className="lg:basis-2/3">
-            <video src="/vid.mp4" controls className="aspect-video rounded-md w-full"/>
+            <video src={video.hlsVideoUrl}controls className="aspect-video rounded-md w-full"/>
             <div className="space-y-2">
                 <p className="line-clamp-2 font-bold text-2xl">{video.title}</p>
                 <div className="flex justify-between items-start">
