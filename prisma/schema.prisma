@@ -20,6 +20,7 @@ model User{
   avatar String
   converImage String 
   videos Video[]
+  videosPublishedCount Int @default(0)
   subscribersCount Int @default(0)
   subscribedTo User[] @relation("subscription")
   subscribers User[] @relation("subscription")
