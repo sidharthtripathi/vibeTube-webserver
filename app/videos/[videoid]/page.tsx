@@ -1,8 +1,10 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { VideoSuggestionCard } from "@/components/ui/VideoSuggestionCard";
+
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import { notFound } from "next/navigation";
+import VideoPlayer from "@/components/VideoPlayer";
 
 export default async function Video({params} : {params : {videoid:string}}){
     const video = await prisma.video.findUnique({where:{id:params.videoid},select:{
@@ -45,12 +47,25 @@ export default async function Video({params} : {params : {videoid:string}}){
     return (
     <div className="flex gap-4 p-4 items-start">
         <div className="lg:basis-2/3">
-            <video src={video.hlsVideoUrl}controls className="aspect-video rounded-md w-full"/>
+                {/* @ts-ignore */}
+             <VideoPlayer
+             
+            src={video.hlsVideoUrl}
+            autoPlay={false}
+            controls={true}
+            width="100%"
+            className="aspect-video rounded-md"
+            />
+            {/* <video src={video.hlsVideoUrl}controls className="aspect-video rounded-md w-full"/> */}
             <div className="space-y-2">
                 <p className="line-clamp-2 font-bold text-2xl">{video.title}</p>
                 <div className="flex justify-between items-start">
                     <div className="flex items-start gap-4">
-                        <Image src = {video.uploader.avatar} alt="profile" height={30} width={30} className="rounded-full size-12"/>
+                    <Avatar>
+                     <AvatarImage src={video.uploader.avatar!} className="rounded-full size-12" />
+                         <AvatarFallback>CN</AvatarFallback>
+                         </Avatar>
+                       
                         <div>
                             <p className="font-semibold">{video.uploader.username}</p>
                             <p className="text-sm text-gray-300">{video.uploader.subscribersCount} Subscribers</p>

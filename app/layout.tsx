@@ -24,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark">
         <section className="container mx-auto">

@@ -52,7 +52,8 @@ export default function Dashboard(){
                 <div className="space-x-2 mt-1">
                   <Dialog>
                     <DialogTrigger>
-                      <Button size={"sm"} variant={"destructive"}>Delete</Button>
+                      <span className="text-sm bg-destructive p-2 rounded-md">Delete</span>
+                      {/* <Button size={"sm"} variant={"destructive"}>Delete</Button> */}
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>

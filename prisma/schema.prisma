@@ -17,8 +17,8 @@ model User{
   id String @id @default(uuid())
   username String @unique
   password String
-  avatar String
-  converImage String 
+  avatar String?
+  converImage String? 
   videos Video[]
   videosPublishedCount Int @default(0)
   subscribersCount Int @default(0)
@@ -34,7 +34,7 @@ model Video{
   rawVideoUrl String
   hlsVideoUrl String
   thumbnailUrl String
-  uploader User @relation(fields: [userid],references: [id])
+  uploader User @relation(fields: [userid],references: [id], onUpdate: Cascade, onDelete: Cascade)
   userid String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

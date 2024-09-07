@@ -14,16 +14,17 @@ type UploadResponse = {
     description : string,
     rawVideoUrl : string,
     hlsVideoUrl : string,
-    thumbnailUrl : string
+    thumbnailUrl : string,
+    id: string
 }
 export async function POST(req : NextRequest){
     const username = await verifyToken()
     if(username===false) return NextResponse.json("ACCESS DENIED",{status : 401,statusText : "ACCESS DENIED"})
-    const {title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl} = (await req.json()) as UploadResponse
+    const {title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl,id} = (await req.json()) as UploadResponse
     const video = await prisma.video.create({
         data : {title,description,thumbnailUrl,rawVideoUrl,hlsVideoUrl,uploader:{connect : {username}}}
     })
-    await sendToQueue({rawVideoUrl})
+    await sendToQueue({rawVideoUrl,id})
     return NextResponse.json(video)
 }
 

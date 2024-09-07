@@ -24,7 +24,7 @@ export default function Upload(){
     async function handlePublish(){
         setLoading(true)
         // getting video presigned url
-        const {preSignedUrl,rawVideoUrl,hlsVideoUrl} = (await server.get('/api/upload')).data
+        const {preSignedUrl,rawVideoUrl,hlsVideoUrl,id} = (await server.get('/api/upload')).data
         // getting thumbnail presigned url
         const {thumbnailUrl,preSignedUrl : thumbnailPresignedUrl} = (await server.get('/api/upload/thumbnail')).data
         // upload video file to the presigned url
@@ -42,7 +42,7 @@ export default function Upload(){
         await axios.put(thumbnailPresignedUrl,imageFile)
 
         // update video in DB
-        await server.post('/api/upload',{title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl})
+        await server.post('/api/upload',{title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl,id})
         setLoading(false)
         setTitle("")
         setDescription("")

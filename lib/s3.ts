@@ -24,9 +24,10 @@ export async function getPutSignedURL(contentType:"video/mp4"|"image/jpeg",key: 
     const preSignedUrl = await getSignedUrl(s3,cmd);
     if(contentType==="video/mp4")
     return {
+      id : key,
       preSignedUrl,
       rawVideoUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/metatube/${key}`,
-      hlsVideoUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/hls/${key}/playlist.m3u8`
+      hlsVideoUrl : `https://${bucketName}.s3.${process.env.AWSREGION}.amazonaws.com/hls/${key}/output.m3u8`
     };
     else return {
       preSignedUrl,
