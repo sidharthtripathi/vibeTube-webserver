@@ -17,15 +17,13 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
           <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded-md">12:34</div>
         </div>
         <div className="mt-2 flex items-start gap-4">
-
-        {/* <Image src={avatar} width={28} height={28} alt="profile" className="rounded-full size-10 object-cover"/> */}
             <Avatar>
               <AvatarImage src={avatar} className="rounded-full size-10 object-cover" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 
           <div >
-          <Link href={`videos/${id}`} className="font-medium line-clamp-2">{title}</Link>
+          <Link href={`/videos/${id}`} className="font-medium line-clamp-2">{title}</Link>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Link href={`/channels/${username}`} className="line-clamp-1">{username}</Link>
           </div>

@@ -8,7 +8,7 @@ export function VideoSuggestionCard({thumbnailUrl,title,views,createdAt,username
             <Image src = {thumbnailUrl} alt="thumbnail" width={180} height={100} className="aspect-video rounded-md" />
             <div className="flex flex-col justify-between space-y-1">
                 <Link href="/videos/abc" className="font-semibold text-xl">{title}</Link>
-                <Link href={"/channels/abc"}>{username}</Link>
+                <Link href={`/channels/${username}`}>{username}</Link>
                 <div className="text-sm text-gray-300 space-x-1">
                     <span>{views} Views</span>
                     <span>&#8226;</span>

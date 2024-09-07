@@ -52,7 +52,7 @@ export default async function Video({params} : {params : {videoid:string}}){
              <VideoPlayer
              
             src={video.hlsVideoUrl}
-            autoPlay={false}
+            autoPlay={true}
             controls={true}
             width="100%"
             className="aspect-video rounded-md"
