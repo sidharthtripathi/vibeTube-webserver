@@ -5,6 +5,10 @@ const nextConfig  = {
           protocol: 'https',
           hostname: 'nextmetatube.s3.ap-south-1.amazonaws.com',
         },
+        {
+          protocol: 'https',
+          hostname: 'images.unsplash.com',
+        },
       ],
     },
   }

@@ -1,3 +1,4 @@
+import { timeAgo } from "@/lib/time";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ export function VideoSuggestionCard({thumbnailUrl,title,views,createdAt,username
                 <div className="text-sm text-gray-300 space-x-1">
                     <span>{views} Views</span>
                     <span>&#8226;</span>
-                    <span>{createdAt.toISOString()}</span>
+                    <span>{timeAgo.format(createdAt)}</span>
                 </div>
             </div>
         </div>

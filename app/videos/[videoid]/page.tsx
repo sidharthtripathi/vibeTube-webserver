@@ -5,6 +5,7 @@ import { VideoSuggestionCard } from "@/components/ui/VideoSuggestionCard";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
+import { timeAgo } from "@/lib/time";
 
 export default async function Video({params} : {params : {videoid:string}}){
     const video = await prisma.video.findUnique({where:{id:params.videoid},select:{
@@ -78,7 +79,7 @@ export default async function Video({params} : {params : {videoid:string}}){
                 <div className="text-sm text-card-foreground space-x-2">
                     <span>{video.views} Views</span>
                     <span>&#8226;</span>
-                    <span>{video.createdAt.toISOString()}</span>
+                    <span>{timeAgo.format(video.createdAt)}</span>
                 </div>
                 <p className="text-sm">
                     {video.description}

@@ -18,7 +18,7 @@ model User{
   username String @unique
   password String
   avatar String?
-  converImage String? 
+  converImage String? @default("https://images.unsplash.com/photo-1497005367839-6e852de72767?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
   videos Video[]
   videosPublishedCount Int @default(0)
   subscribersCount Int @default(0)

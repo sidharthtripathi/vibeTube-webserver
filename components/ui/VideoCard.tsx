@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { timeAgo } from "@/lib/time";
 
 export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id} : {thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string,id:string}){
     return (
@@ -30,7 +31,7 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="line-clamp-1">{views} views</div>
-            <div className="line-clamp-1">{createdAt.toISOString()}</div>
+            <div className="line-clamp-1">{timeAgo.format(createdAt)}</div>
           </div>
           </div>
          
