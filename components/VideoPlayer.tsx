@@ -1,6 +1,7 @@
 "use client"
-import ReactHlsPlayer from "react-hls-player";
+import Hls from 'hls.js'
 
+import { useEffect, useRef } from 'react'
 export default function VideoPlayer({src,autoPlay,controls,width,className} : {
     src : string,
     controls:boolean,
@@ -8,13 +9,20 @@ export default function VideoPlayer({src,autoPlay,controls,width,className} : {
     width : string,
     className : string,
 }){
+    const videoRef = useRef<null | HTMLVideoElement>(null)
+    useEffect(()=>{
+      const hls = new Hls()
+        if(Hls.isSupported() && videoRef.current){
+          hls.loadSource(src)
+          hls.attachMedia(videoRef.current)
+        }
+      })
     return (
-        // @ts-ignore
-        <ReactHlsPlayer
-        src={src}
-        controls = {controls}
-        autoPlay = {autoPlay}
-        width={width}
+        <video
+        ref={videoRef}
+        width={"100%"}
+        controls
+        autoPlay
         className={className}
         
         />
