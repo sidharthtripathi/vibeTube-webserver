@@ -6,6 +6,10 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
 import { timeAgo } from "@/lib/time";
+import { BookmarkIcon } from "@radix-ui/react-icons";
+import { Dialog,DialogContent,DialogTrigger, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Playlist } from "@/components/Playlist";
+
 
 export default async function Video({params} : {params : {videoid:string}}){
     const video = await prisma.video.findUnique({where:{id:params.videoid},select:{
@@ -72,7 +76,25 @@ export default async function Video({params} : {params : {videoid:string}}){
                             <p className="text-sm text-gray-300">{video.uploader.subscribersCount} Subscribers</p>
                         </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                    <Dialog>
+                        <DialogTrigger>
+                         <BookmarkIcon className="size-6 hover:cursor-pointer"/>
+                        </DialogTrigger>
+                        <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Add Video</DialogTitle>
+                            <DialogDescription>
+                                Select the playlist you want to add the video to
+                            </DialogDescription>
+                        </DialogHeader>
+                        <Playlist videoId={params.videoid}/>
+                        </DialogContent>
+                    </Dialog>
+                    
                     <Button>Subscribe</Button>
+                    </div>
+                    
                 </div>
             </div>
             <div className="bg-secondary rounded-lg mt-2 p-2">

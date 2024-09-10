@@ -24,6 +24,8 @@ model User{
   subscribersCount Int @default(0)
   subscribedTo User[] @relation("subscription")
   subscribers User[] @relation("subscription")
+
+  playlists Playlist[]
 }
 
 model Video{
@@ -36,7 +38,17 @@ model Video{
   thumbnailUrl String
   uploader User @relation(fields: [userid],references: [id], onUpdate: Cascade, onDelete: Cascade)
   userid String
+  playlist Playlist[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+}
+
+model Playlist{
+  id String @id @default(uuid())
+  name String
+  creator User @relation(fields: [creatorId],references: [id])
+  creatorId String
+
+  videos Video[]
 }
