@@ -1,8 +1,19 @@
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { VideoCard } from "@/components/ui/VideoCard"
+import { prisma } from "@/lib/prisma"
 
-export default function Component() {
+export default async function Component({params : {playlistid}} : {params : {playlistid : string}}) {
+  const videos = await prisma.video.findMany({where : {id : playlistid},select : {
+    thumbnailUrl : true,
+    title : true,
+    createdAt: true,
+    id: true,
+    views : true,
+    uploader : {
+      select : {username : true,avatar : true}
+    }
+  }})
   return (
     <section >
     <Breadcrumb className='px-2'>
@@ -17,17 +28,11 @@ export default function Component() {
         </BreadcrumbList>
         </Breadcrumb>
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4" >
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
-     <VideoCard/>
+      {
+        videos.map(video=>(<VideoCard key={video.id} id={video.id} avatar={video.uploader.avatar} createdAt={video.createdAt} thumbnailUrl={video.thumbnailUrl} title={video.title} username={video.uploader.username} views={video.views}/>))
+      }
+     
+  
     </div>
     </section>
    

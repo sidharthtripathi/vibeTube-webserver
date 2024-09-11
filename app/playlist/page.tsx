@@ -1,7 +1,15 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb"
+import { prisma } from "@/lib/prisma"
+import { verifyToken } from "@/lib/verifytoken"
 import Link from "next/link"
+import { NextResponse } from "next/server";
 
-export default function Playlist(){
+export default async function Playlist(){
+    const username = await verifyToken();
+    if(!username) return NextResponse.json("INVALID TOKEN",{status : 401})
+    const playlists  = await prisma.playlist.findMany({
+        where : {creator : {username}},select : {id:true,name:true,creator : {select: {username : true}}}
+    })
     return(
         <section className="px-2 sm:px-0">
             <Breadcrumb>
@@ -12,10 +20,11 @@ export default function Playlist(){
             </BreadcrumbList>
             </Breadcrumb>
             <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <Collection/>
-            <Collection/>
-            <Collection/>
-            <Collection/>
+           {
+            playlists.map(playlist=>(
+                <Collection key={playlist.id} playlistId={playlist.id} playlistName={playlist.name} creator={playlist.creator.username} />
+            ))
+           }
         </div>
         </section>
         
@@ -23,7 +32,7 @@ export default function Playlist(){
 }
 
 
-function Collection(){
+function Collection({creator,playlistId,playlistName} : {creator:string,playlistName : string,playlistId:string}){
     return(
     <div>
         <div className="relative flex justify-center">
@@ -32,10 +41,10 @@ function Collection(){
         <img src="/thumbnail.jpg" alt="thumbnail" className="w-full object-cover aspect-video rounded-md translate-y-3" />
     </div>
     <div className="mt-4 text-sm">
-    <p>Playlist Name</p>
-    <div className="text-xs space-x-1"><span>creator name</span> <span>&#8226;</span> <span>playlist</span></div>
+    <p>{playlistName}</p>
+    <div className="text-xs space-x-1"><span>+{creator}</span> <span>&#8226;</span> <span>playlist</span></div>
     <Link href="/playlist/abc">
-    <span className="text-xs">view playlist</span>
+    <Link href={`/playlist/${playlistId}`} className="text-xs">view Playlist</Link>
     </Link>
     
     </div>

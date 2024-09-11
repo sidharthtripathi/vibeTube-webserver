@@ -8,8 +8,9 @@ export function Playlist({videoId} : {videoId : string}){
 
     useEffect(()=>{
         async function get(){
-            const {data} = await server.get('/playlist')
-            setPlaylist(data)
+            const {data} = await server.get('/api/playlist')
+            console.log(data)
+            // setPlaylist(data)
         }
         get()
         
@@ -19,7 +20,7 @@ export function Playlist({videoId} : {videoId : string}){
             {playlists.map(playlist=>(
                 <li key={playlist.id} className="bg-secondary rounded-md p-2"
                 onClick={async()=>{
-                    server.put("/playlist",{videoId,playlistId : playlist.id})
+                    server.put("/api/playlist",{videoId,playlistId : playlist.id})
                 }}
                 >{playlist.name}</li>
             ))}

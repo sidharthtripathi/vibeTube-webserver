@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { timeAgo } from "@/lib/time";
 
-export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id} : {thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string,id:string}){
+export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id} : {thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string |null,id:string}){
     return (
         <div className="p-2">
         <div className="relative">
@@ -18,7 +18,7 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
         </div>
         <div className="mt-2 flex items-start gap-4">
             <Avatar>
-              <AvatarImage src={avatar} className="rounded-full size-10 object-cover" />
+              <AvatarImage src={avatar!} className="rounded-full size-10 object-cover" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 
