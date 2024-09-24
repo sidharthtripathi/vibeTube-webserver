@@ -24,7 +24,8 @@ export default function Dashboard(){
             <h2 className="text-xl font-semibold">Avatar</h2>
             <div className="flex items-center gap-4">
               <Image alt="avatar" width={100} height={100} src={'/profile.webp'} className="size-20 rounded-full"/>
-              <Button>Change avatar</Button>
+              <Button>change avatar</Button>
+              
             </div>
           </div>
          
@@ -69,8 +70,6 @@ export default function Dashboard(){
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  
-                  <Link href={"/dashboard/videos/someid"}className=" text-sm hover:underline hover:text-muted-foreground">Edit</Link>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
+import {Separator} from '@/components/ui/separator'
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -51,6 +52,7 @@ export default async function Playlist() {
           ))}
         </div>
       </section>
+      <Separator className="my-4"/>
       <section>
         <CreatePlaylist />
       </section>

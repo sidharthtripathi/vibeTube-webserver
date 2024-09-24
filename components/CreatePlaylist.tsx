@@ -1,5 +1,4 @@
 "use client"
-
 import { useForm } from "react-hook-form"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
@@ -21,7 +20,7 @@ export function CreatePlaylist(){
     }
     return(
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-            <Label htmlFor="inputfield">Create new playlist</Label>
+            <Label htmlFor="inputfield" className="text-xl">Create new playlist</Label>
             <Input id="inputfield" type="text" {...register("title",{required : "Name can't be empty"})} placeholder="playlist name" disabled = {isSubmitting} />
             <Button type="submit" disabled = {isSubmitting} >create</Button>
         </form>
