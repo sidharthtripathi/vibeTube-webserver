@@ -5,7 +5,6 @@ import { headers } from "next/headers"
 import {redirect} from 'next/navigation'
 export default async function Component() {
   const username = headers().get("username")
-  console.log("username is :",username)
   if(!username) return redirect('/join')
   const videos = await prisma.user.findUnique({
     where : {
@@ -15,6 +14,7 @@ export default async function Component() {
       subscribedTo : {
         select : {
           videos : {
+            orderBy : {createdAt : "desc"},
             select : {
               thumbnailUrl : true,
               title : true,

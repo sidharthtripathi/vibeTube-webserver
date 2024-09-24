@@ -1,8 +1,7 @@
 
 import { VideoCard } from "@/components/ui/VideoCard"
 import { prisma } from "@/lib/prisma"
-
-export default async function Component(req : {searchParams : Record<string,string>}) {
+export default async function Search(req : {searchParams : Record<string,string>}) {
   
     const q = req.searchParams.q
     const videos = await prisma.video.findMany({
