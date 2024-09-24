@@ -1,29 +1,21 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+import {jwtVerify} from 'jose'
 
-export function middleware(req:NextRequest){
-    const accessToken = cookies().get('access-token')
-    const requestHeaders = new Headers(req.headers);
-    if(!accessToken) return NextResponse.redirect(new URL("/join",req.url))
-    else{
+export async function middleware(request: NextRequest) {
+  const token = request.cookies.get('access-token');
 
-        try {
-            const {username} = jwt.verify(accessToken.value,process.env.JWT_SECRET as string) as JwtPayload
-            requestHeaders.set('username',username)
-        } catch (error) {
-            return NextResponse.redirect(new URL("/join",req.url))
-        }
-        finally{
-            return NextResponse.next({
-                request : {
-                    headers : requestHeaders
-                }
-            })
-        }
-    }
-}
-
-export const config = {
-    matcher : ['/subscriptions','/playlist/:path','/upload','/dashboard']
+  if (!token) return NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  try {
+    const {payload} = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET as string))
+    requestHeaders.set('username', payload.username as string);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders
+      }
+    });
+  }
 }

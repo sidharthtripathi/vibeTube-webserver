@@ -1,12 +1,12 @@
 
 import { VideoCard } from "@/components/ui/VideoCard"
 import { prisma } from "@/lib/prisma"
-import { verifyToken } from "@/lib/verifytoken"
-import { NextResponse } from "next/server"
-
+import { headers } from "next/headers"
+import {redirect} from 'next/navigation'
 export default async function Component() {
-  const username = await verifyToken()
-  if(username===false) return NextResponse.redirect('/join')
+  const username = headers().get("username")
+  console.log("username is :",username)
+  if(!username) return redirect('/join')
   const videos = await prisma.user.findUnique({
     where : {
       username
