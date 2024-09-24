@@ -26,6 +26,7 @@ export default function Join() {
     if(isLogin){
       try {
         await server.post('/api/login',{username,password})
+        router.push('/')
       } catch (error) {
         if(error instanceof AxiosError){
           // error msg here
@@ -34,8 +35,6 @@ export default function Join() {
       }
       finally{
         setLoading(false)
-        router.push('/')
-        
       }
     }
     else{
