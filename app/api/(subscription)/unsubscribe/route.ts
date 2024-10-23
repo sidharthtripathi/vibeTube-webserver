@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/verifytoken";
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req:NextRequest) {
-    const username = await verifyToken()
+    const username = headers().get("username")
     if(!username) return NextResponse.json("INVALID ACCESS TOKEN",{status : 401,statusText : "INVALID ACCESS TOKEN"});
     const {username: channelName} = await req.json();
     await prisma.user.update({

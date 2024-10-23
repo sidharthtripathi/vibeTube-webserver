@@ -112,8 +112,8 @@ export default async function Video({params} : {params : {videoid:string}}){
 
              {/* Better create a paralle route for this */}
              {
-                videoSuggestion?.uploader.videos.map(video=>(
-                    <VideoSuggestionCard title={video.title} thumbnailUrl={video.thumbnailUrl} createdAt={video.createdAt} views={video.views} username={videoSuggestion.uploader.username} key={video.id} />
+                videoSuggestion && videoSuggestion?.uploader.videos.map(video=>(
+                    <VideoSuggestionCard id={video.id} title={video.title} thumbnailUrl={video.thumbnailUrl} createdAt={video.createdAt} views={video.views} username={videoSuggestion.uploader.username} key={video.id} />
                 ))
              }
         </div>

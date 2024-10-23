@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MountainIcon } from "@/components/ui/MountainIcon";
 import { Toaster } from "@/components/ui/toaster";
 import { SearchBox } from "@/components/ui/SearchBox";
+import { headers } from "next/headers";
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -22,6 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const username = headers().get("username")
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -40,7 +42,9 @@ export default function RootLayout({
           <Link href="/playlist" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Playlist
           </Link>
-          <DropdownMenu>
+          {
+            username && 
+            <DropdownMenu>
             <DropdownMenuTrigger>
                 <Avatar className="size-8">
                   <AvatarImage src="https://github.com/shadcn.png" />
@@ -56,6 +60,8 @@ export default function RootLayout({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          }
+          
           </nav>
         </header>
         {children}
