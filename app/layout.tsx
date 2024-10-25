@@ -56,7 +56,7 @@ export default function RootLayout({
                 <Link href={"/upload"}>upload</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/api/logout">logout</Link>
+                <Link prefetch = {false} href="/api/logout">logout</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
