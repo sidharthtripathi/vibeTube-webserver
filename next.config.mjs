@@ -3,7 +3,7 @@ const nextConfig  = {
       remotePatterns: [
         {
           protocol: 'https',
-          hostname: 'nextmetatube.s3.ap-south-1.amazonaws.com',
+          hostname: 'nextjstube.s3.ap-south-1.amazonaws.com',
         },
         {
           protocol: 'https',
