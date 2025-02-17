@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {jwtVerify} from 'jose'
 
 export async function middleware(request: NextRequest) {
+  request.headers.delete("username")
   const token = request.cookies.get('access-token');
 
   if (!token) return NextResponse.next();
