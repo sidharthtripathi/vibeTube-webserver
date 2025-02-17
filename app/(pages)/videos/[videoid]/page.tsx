@@ -11,8 +11,12 @@ import { Dialog,DialogContent,DialogTrigger, DialogDescription, DialogHeader, Di
 import { Playlist } from "@/components/Playlist";
 
 
-export default async function Video({params} : {params : {videoid:string}}){
-    const video = await prisma.video.findUnique({where:{id:params.videoid},select:{
+export default async function Video({params : {videoid}} : {params : {videoid:string}}){
+    await prisma.video.update({
+        data : {views : {increment : 1}},
+        where : {id : videoid}
+    })
+    const video = await prisma.video.findUnique({where:{id:videoid},select:{
         hlsVideoUrl:true,
         title:true,
         description:true,
@@ -28,7 +32,7 @@ export default async function Video({params} : {params : {videoid:string}}){
     }})
 
     const videoSuggestion = await prisma.video.findUnique({
-        where:{id : params.videoid},
+        where:{id : videoid},
         select : {
             uploader : {
                 select : {
@@ -88,7 +92,7 @@ export default async function Video({params} : {params : {videoid:string}}){
                                 Select the playlist you want to add the video to
                             </DialogDescription>
                         </DialogHeader>
-                        <Playlist videoId={params.videoid}/>
+                        <Playlist videoId={videoid}/>
                         </DialogContent>
                     </Dialog>
                     
