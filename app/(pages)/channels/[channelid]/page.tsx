@@ -17,6 +17,7 @@ export default async function Channel({params : {channelid}} : {params : {channe
             videos : {
                 select : {
                     thumbnailUrl : true,
+                    duration : true,
                     id : true,
                     title : true,
                     views : true,
@@ -53,8 +54,8 @@ export default async function Channel({params : {channelid}} : {params : {channe
             </header>
             <section className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
               {
-                creator.videos.map(({id,thumbnailUrl,title,views,createdAt})=>(
-                    <VideoCard key={id} id={id} thumbnailUrl={thumbnailUrl} title={title} views={views} createdAt={createdAt} avatar={creator.avatar!} username={creator.username} />
+                creator.videos.map(({id,duration,thumbnailUrl,title,views,createdAt})=>(
+                    <VideoCard duration={duration} key={id} id={id} thumbnailUrl={thumbnailUrl} title={title} views={views} createdAt={createdAt} avatar={creator.avatar!} username={creator.username} />
                 ))
               }
             </section>

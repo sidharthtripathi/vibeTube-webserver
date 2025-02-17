@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { timeAgo } from "@/lib/time";
-
-export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id} : {thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string |null,id:string}){
+import format from 'format-duration'
+export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id,duration} : {duration : number,thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string |null,id:string}){
     return (
         <div className="p-2">
         <div className="relative">
@@ -14,7 +14,7 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
             height={180}
             className="aspect-video rounded-md w-full"
           />
-          <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded-md">12:34</div>
+          <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded-md">{format(duration*1000)}</div>
         </div>
         <div className="mt-2 flex items-start gap-4">
             <Avatar>

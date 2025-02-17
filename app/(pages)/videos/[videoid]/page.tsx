@@ -37,6 +37,7 @@ export default async function Video({params : {videoid}} : {params : {videoid:st
             uploader : {
                 select : {
                     videos : {
+                        where : {isPublished : true},
                         select : {
                             thumbnailUrl : true,
                             title: true,

@@ -20,8 +20,10 @@ export default async function Component({
     select: {
       name: true,
       videos: {
+        where : {isPublished : true},
         select: {
           thumbnailUrl: true,
+          duration : true,
           title: true,
           createdAt: true,
           id: true,
@@ -52,6 +54,7 @@ export default async function Component({
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {playlist.videos.map((video) => (
           <VideoCard
+          duration={video.duration}
             key={video.id}
             id={video.id}
             avatar={video.uploader.avatar}

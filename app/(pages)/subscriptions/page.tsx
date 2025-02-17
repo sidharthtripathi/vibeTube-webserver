@@ -8,14 +8,16 @@ export default async function Component() {
   if(!username) return redirect('/join')
   const videos = await prisma.user.findUnique({
     where : {
-      username
+      username,
     },
     select : {
       subscribedTo : {
         select : {
           videos : {
+            where : {isPublished : true},
             orderBy : {createdAt : "desc"},
             select : {
+              duration : true,
               thumbnailUrl : true,
               title : true,
               views : true,
@@ -39,7 +41,7 @@ export default async function Component() {
      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4" >
       {
         videos?.subscribedTo.map(arr=>{
-          return arr.videos.map(video=>(<VideoCard key={video.id} thumbnailUrl={video.thumbnailUrl} username={video.uploader.username} avatar={video.uploader.avatar} createdAt={video.createdAt} id={video.id} title={video.title} views={video.views}/>))
+          return arr.videos.map(video=>(<VideoCard duration={video.duration} key={video.id} thumbnailUrl={video.thumbnailUrl} username={video.uploader.username} avatar={video.uploader.avatar} createdAt={video.createdAt} id={video.id} title={video.title} views={video.views}/>))
         }).flatMap(arr=>arr)
       }
     </div>

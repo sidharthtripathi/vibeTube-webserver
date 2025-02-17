@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "format-duration": "^3.0.2",
     "hls.js": "^1.5.15",
     "javascript-time-ago": "^2.5.11",
     "jose": "^5.9.3",
