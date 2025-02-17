@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { VideoSuggestionCard } from "@/components/ui/VideoSuggestionCard";
-
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
@@ -8,8 +7,8 @@ import { timeAgo } from "@/lib/time";
 import { BookmarkIcon } from "@radix-ui/react-icons";
 import { Dialog,DialogContent,DialogTrigger, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Playlist } from "@/components/Playlist";
-import { SubscribeButton } from "@/components/SubscribeButton";
 import { SubscriptionButton } from "@/components/SubscriptionButton";
+import Link from "next/link";
 
 
 export default async function Video({params : {videoid}} : {params : {videoid:string}}){
@@ -73,11 +72,11 @@ export default async function Video({params : {videoid}} : {params : {videoid:st
                     <div className="flex items-start gap-4">
                     <Avatar>
                      <AvatarImage src={video.uploader.avatar!} className="rounded-full size-12" />
-                         <AvatarFallback>CN</AvatarFallback>
+                         <AvatarFallback>{video.uploader.username.slice(0,2).toUpperCase()}</AvatarFallback>
                          </Avatar>
                        
                         <div>
-                            <p className="font-semibold">{video.uploader.username}</p>
+                            <Link  href = {`/channels/${video.uploader.username}`} className="font-semibold">{video.uploader.username}</Link>
                             <p className="text-sm text-gray-300">{video.uploader.subscribersCount} Subscribers</p>
                         </div>
                     </div>

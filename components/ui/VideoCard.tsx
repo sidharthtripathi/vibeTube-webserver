@@ -19,7 +19,7 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
         <div className="mt-2 flex items-start gap-4">
             <Avatar>
               <AvatarImage src={avatar!} className="rounded-full size-10 object-cover" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{username.slice(0,2).toUpperCase()}</AvatarFallback>
             </Avatar>
 
           <div >

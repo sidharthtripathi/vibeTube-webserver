@@ -34,7 +34,7 @@ export default async function Channel({params : {channelid}} : {params : {channe
                 <div className="flex items-center gap-4">
                 <Avatar className="size-36 sm:size-44">
   <AvatarImage src={creator.avatar!} className="rounded-full sm:size-44 size-36 object-cover" />
-  <AvatarFallback>CN</AvatarFallback>
+  <AvatarFallback>{creator.username.slice(0,2).toUpperCase()}</AvatarFallback>
 </Avatar>
 
                     <div className="space-y-2">

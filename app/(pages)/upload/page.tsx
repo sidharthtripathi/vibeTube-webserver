@@ -128,7 +128,7 @@ export default function Upload() {
         )}
         <Button type="submit">publish</Button>
       </form>
-      {isSubmitting && <Progress value={progress} />}
+      {isSubmitting && <Progress className="my-4" value={progress} />}
     </section>
   );
 }

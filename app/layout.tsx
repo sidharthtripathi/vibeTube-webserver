@@ -47,8 +47,8 @@ export default function RootLayout({
             <DropdownMenu>
             <DropdownMenuTrigger>
                 <Avatar className="size-8">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                   <AvatarFallback>CN</AvatarFallback>
+                  
+                   <AvatarFallback>{username.slice(0,2).toUpperCase()}</AvatarFallback>
                  </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

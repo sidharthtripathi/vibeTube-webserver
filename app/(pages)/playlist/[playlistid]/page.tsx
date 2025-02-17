@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { VideoCard } from "@/components/ui/VideoCard";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function Component({
@@ -38,13 +39,13 @@ export default async function Component({
       <Breadcrumb className="px-2">
         <BreadcrumbList className="text-3xl font-bold">
           <BreadcrumbItem>
-            <BreadcrumbLink href="/playlist">Playlist</BreadcrumbLink>
+            <Link href="/playlist">Playlist</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href={`/playlist/${playlistid}`}>
+            <Link href={`/playlist/${playlistid}`}>
               {playlist.name}
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
