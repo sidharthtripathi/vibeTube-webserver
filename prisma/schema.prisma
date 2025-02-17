@@ -33,6 +33,8 @@ model Video{
   id String @id @default(uuid())
   title String
   views Int @default(0)
+  duration Int @default(0)
+  isPublished Boolean @default(false)
   description String
   rawVideoUrl String
   hlsVideoUrl String

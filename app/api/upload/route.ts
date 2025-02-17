@@ -22,7 +22,7 @@ export async function POST(req : NextRequest){
     if(!username) return NextResponse.json("ACCESS DENIED",{status : 401,statusText : "ACCESS DENIED"})
     const {title,description,rawVideoUrl,hlsVideoUrl,thumbnailUrl,id} = (await req.json()) as UploadResponse
     const video = await prisma.video.create({
-        data : {title,description,thumbnailUrl,rawVideoUrl,hlsVideoUrl,uploader:{connect : {username}}}
+        data : {id,title,description,thumbnailUrl,rawVideoUrl,hlsVideoUrl,uploader:{connect : {username}}}
     })
     await sendToQueue({rawVideoUrl,id})
     return NextResponse.json(video)
