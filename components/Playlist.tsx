@@ -2,6 +2,7 @@
 
 import { server } from "@/lib/axios"
 import { useEffect, useState } from "react"
+import { DialogClose, DialogFooter } from "./ui/dialog"
 
 export function Playlist({videoId} : {videoId : string}){
     const [playlists,setPlaylist] = useState<{name:string,id:string}[]>([])
@@ -10,20 +11,19 @@ export function Playlist({videoId} : {videoId : string}){
         async function get(){
             const {data} = await server.get('/api/playlist')
             console.log(data)
-            // setPlaylist(data)
+            setPlaylist(data)
         }
         get()
-        
     },[])
     return(
-        <ul className="space-y-2">
+        <DialogFooter className="space-y-2">
             {playlists.map(playlist=>(
-                <li key={playlist.id} className="bg-secondary rounded-md p-2"
+                <DialogClose key={playlist.id} className="bg-secondary rounded-md w-full p-2 cursor-pointer"
                 onClick={async()=>{
                     server.put("/api/playlist",{videoId,playlistId : playlist.id})
                 }}
-                >{playlist.name}</li>
+                >{playlist.name}</DialogClose>
             ))}
-        </ul>
+        </DialogFooter>
     )
 }

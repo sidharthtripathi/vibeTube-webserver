@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { VideoSuggestionCard } from "@/components/ui/VideoSuggestionCard";
 
 import { prisma } from "@/lib/prisma";
@@ -9,6 +8,8 @@ import { timeAgo } from "@/lib/time";
 import { BookmarkIcon } from "@radix-ui/react-icons";
 import { Dialog,DialogContent,DialogTrigger, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Playlist } from "@/components/Playlist";
+import { SubscribeButton } from "@/components/SubscribeButton";
+import { SubscriptionButton } from "@/components/SubscriptionButton";
 
 
 export default async function Video({params : {videoid}} : {params : {videoid:string}}){
@@ -96,7 +97,7 @@ export default async function Video({params : {videoid}} : {params : {videoid:st
                         </DialogContent>
                     </Dialog>
                     
-                    <Button>Subscribe</Button>
+                    <SubscriptionButton username={video.uploader.username}/>
                     </div>
                     
                 </div>

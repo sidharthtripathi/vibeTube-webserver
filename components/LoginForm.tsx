@@ -50,6 +50,7 @@ export function LoginForm() {
             <input
               className="border-0 bg-transparent flex-grow focus:outline-none border-none"
               id="password"
+              type="password"
               placeholder="password"
               {...register("password")}
             />

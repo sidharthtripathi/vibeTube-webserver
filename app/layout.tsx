@@ -43,7 +43,7 @@ export default function RootLayout({
             Playlist
           </Link>
           {
-            username && 
+            username ? 
             <DropdownMenu>
             <DropdownMenuTrigger>
                 <Avatar className="size-8">
@@ -59,7 +59,10 @@ export default function RootLayout({
                 <Link prefetch = {false} href="/api/logout">logout</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> : 
+          <Link href="/join" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+          join
+        </Link>
           }
           
           </nav>
