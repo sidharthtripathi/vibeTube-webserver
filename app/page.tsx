@@ -1,7 +1,6 @@
 
 import { VideoCard } from "@/components/ui/VideoCard"
 import { prisma } from "@/lib/prisma"
-import Head from 'next/head'
 export default async function Component() {
   const videos = await prisma.video.findMany({
     orderBy : {createdAt : "desc"},
