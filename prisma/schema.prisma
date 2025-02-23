@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User{
-  id String @id @default(uuid())
+  id String @id @default(cuid())
   username String @unique
   password String
   avatar String?
@@ -26,11 +26,13 @@ model User{
   subscribedTo User[] @relation("subscription")
   subscribers User[] @relation("subscription")
 
+  comments Comment[]
+
   playlists Playlist[]
 }
 
 model Video{
-  id String @id @default(uuid())
+  id String @id @default(cuid())
   title String
   views Int @default(0)
   duration Int @default(0)
@@ -42,16 +44,44 @@ model Video{
   uploader User @relation(fields: [userid],references: [id], onUpdate: Cascade, onDelete: Cascade)
   userid String
   playlist Playlist[]
+
+  comments Comment[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
 }
 
 model Playlist{
-  id String @id @default(uuid())
+  id String @id @default(cuid())
   name String
   creator User @relation(fields: [creatorId],references: [id])
   creatorId String
 
   videos Video[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment{
+  id String @id @default(cuid())
+  comment String
+  author User @relation(references: [id],fields: [authorId])
+  authorId String 
+
+  video Video? @relation(references: [id],fields: [videoId])
+  videoId String?
+
+  replyCount Int @default(0)
+
+  replies Comment[] @relation("commentAndReply")
+
+  commentId String?
+  repliedToComment Comment? @relation("commentAndReply",references: [id],fields: [commentId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
 }

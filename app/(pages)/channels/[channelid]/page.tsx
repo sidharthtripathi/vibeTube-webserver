@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { SubscriptionButton } from "@/components/SubscriptionButton";
+import { SubscriptionStatus } from "@/components/SubscriptionStatus";
 
 export default async function Channel({params : {channelid}} : {params : {channelid : string}}){
     const creator = await prisma.user.findUnique({
@@ -48,7 +48,7 @@ export default async function Channel({params : {channelid}} : {params : {channe
                             <span>{creator.videosPublishedCount} videos</span>
                         </div>
                         <p className="text-sm bg-secondary rounded-md p-2 line-clamp-4 max-w-fit">Here is all about the channel dude just have a look at meh </p>
-                        <SubscriptionButton username={creator.username}/>
+                        <SubscriptionStatus username={creator.username}/>
                     </div>
                 </div>
             </header>

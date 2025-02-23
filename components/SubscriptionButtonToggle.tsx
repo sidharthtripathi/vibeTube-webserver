@@ -1,11 +1,38 @@
-"use client"
+"use client";
+import { useState } from "react";
+import { server } from "@/lib/axios";
+import { Button } from "./ui/button";
 
-import { useState } from "react"
-import { SubscribeButton } from "./SubscribeButton"
-import { UnsubscribeButton } from "./UnsubscribeButton"
+export function SubscriptionButtonToggle({
+  isSubscribed,
+  username,
+}: {
+  isSubscribed: boolean;
+  username: string;
+}) {
+  async function handleSubscribe() {
+    setIsSub(true);
 
-export function SubscriptionButtonToggle({isSubscribed,username} : {isSubscribed : boolean,username:string}){
-    const [isSub,setIsSub] = useState(isSubscribed)
-    if(!isSub) return <SubscribeButton username={username} setIsSub={setIsSub} />
-    else return <UnsubscribeButton  username={username} setIsSub={setIsSub}/>
+    try {
+      await server.put("/api/subscribe", { username });
+    } catch (error) {
+      setIsSub(false);
+    }
+  }
+  async function handleUnsubscribe() {
+    setIsSub(false);
+    try {
+      await server.put("/api/unsubscribe", { username });
+    } catch (error) {
+      setIsSub(true);
+    }
+  }
+  const [isSub, setIsSub] = useState(isSubscribed);
+  if (!isSub) return <Button onClick={handleSubscribe}>Subscribe</Button>;
+  else
+    return (
+      <Button onClick={handleUnsubscribe} variant={"destructive"}>
+        Unsubscribe
+      </Button>
+    );
 }
