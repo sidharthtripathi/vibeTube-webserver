@@ -74,11 +74,11 @@ function Collection({
   return (
     <div>
       <div className="relative flex justify-center">
-        <div className="w-[90%] aspect-video bg-pink-300 absolute rounded-md  translate-y-1"></div>
-        <div className="w-[95%] aspect-video bg-yellow-200 absolute translate-y-2 rounded-md"></div>
+        <div className="w-[90%] aspect-video bg-muted-foreground absolute rounded-md  translate-y-1"></div>
+        <div className="w-[95%] aspect-video bg-secondary absolute translate-y-2 rounded-md"></div>
         {
             thumbnail  ? <img
-            src={"/thumbnail.jpg"}
+            src={thumbnail}
             alt="thumbnail"
             className="w-full object-cover aspect-video rounded-md translate-y-3"
           /> : 
