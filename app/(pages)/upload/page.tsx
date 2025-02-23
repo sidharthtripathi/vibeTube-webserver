@@ -9,177 +9,126 @@ import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-
-type FormValues = {
+type FormType = {
   title: string;
   description: string;
 };
-
-interface UploadResponse {
-  preSignedUrl: string;
-  rawVideoUrl: string;
-  hlsVideoUrl: string;
-  id: string;
-}
-
-interface ThumbnailResponse {
-  thumbnailUrl: string;
-  preSignedUrl: string;
-}
-
-type MediaFile = {
-  file: File | null;
-  url: string | null;
-};
-
-const initialMediaState: MediaFile = {
-  file: null,
-  url: null,
-};
-
 export default function Upload() {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
-  const [video, setVideo] = useState<MediaFile>(initialMediaState);
-  const [thumbnail, setThumbnail] = useState<MediaFile>(initialMediaState);
-  const [uploadProgress, setUploadProgress] = useState(0);
-
-  const handleFileChange = (file: File | undefined, setMedia: React.Dispatch<React.SetStateAction<MediaFile>>) => {
-    if (!file) return;
-    setMedia({ file, url: URL.createObjectURL(file) });
-  };
-
-  const getPresignedUrls = async () => {
-    const [videoResponse, thumbnailResponse] = await Promise.all([
-      server.get<UploadResponse>("/api/upload"),
-      server.get<ThumbnailResponse>("/api/upload/thumbnail")
-    ]);
-    
-    return {
-      video: videoResponse.data,
-      thumbnail: thumbnailResponse.data
-    };
-  };
-
-  const uploadToS3 = async (url: string, file: File, onProgress?: (progress: number) => void) => {
-    await axios.put(url, file, {
+  const [vidFile, setVidFile] = useState<null | File>(null);
+  const [vidUrl, setVidUrl] = useState<undefined | string>(undefined);
+  const [thumbnail, setThumbnail] = useState<null | File>(null);
+  const [thumbnailURL, setThumbnailUrl] = useState<undefined | string>(
+    undefined
+  );
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormType>();
+  const [progress, setProgress] = useState(0);
+  async function handlePublish({ title, description }: FormType) {
+    // getting video presigned url
+    const { preSignedUrl, rawVideoUrl, hlsVideoUrl, id } = (
+      await server.get("/api/upload")
+    ).data;
+    // getting thumbnail presigned url
+    const { thumbnailUrl, preSignedUrl: thumbnailPresignedUrl } = (
+      await server.get("/api/upload/thumbnail")
+    ).data;
+    // upload video file to the presigned url
+    await axios.put(preSignedUrl, vidFile, {
       onUploadProgress: (e) => {
-        if (e.lengthComputable && onProgress) {
-          onProgress(Math.round((e.loaded / e.total!) * 100));
+        if (e.lengthComputable) {
+          const progress = Math.round((e.loaded / e.total!) * 100);
+          setProgress(progress);
         }
       },
     });
-  };
 
-  const handlePublish = async ({ title, description }: FormValues) => {
-    try {
-      if (!video.file || !thumbnail.file) {
-        toast({ variant: "destructive", title: "Error", description: "Please select both video and thumbnail" });
-        return;
-      }
+    // upload thumbnail to presigned url
+    await axios.put(thumbnailPresignedUrl, thumbnail);
 
-      const { video: videoUrls, thumbnail: thumbnailUrls } = await getPresignedUrls();
-
-      await uploadToS3(videoUrls.preSignedUrl, video.file, setUploadProgress);
-      await uploadToS3(thumbnailUrls.preSignedUrl, thumbnail.file);
-
-      await server.post("/api/upload", {
-        title,
-        description,
-        rawVideoUrl: videoUrls.rawVideoUrl,
-        hlsVideoUrl: videoUrls.hlsVideoUrl,
-        thumbnailUrl: thumbnailUrls.thumbnailUrl,
-        id: videoUrls.id,
-      });
-
-      resetForm();
-      toast({ title: "Success", description: "Video published successfully" });
-    } catch (error) {
-      toast({ variant: "destructive", title: "Upload Failed", description: "An error occurred during upload" });
-    }
-  };
-
-  const resetForm = () => {
+    // update video in DB
+    await server.post("/api/upload", {
+      title,
+      description,
+      rawVideoUrl,
+      hlsVideoUrl,
+      thumbnailUrl,
+      id,
+    });
     reset();
-    setVideo(initialMediaState);
-    setThumbnail(initialMediaState);
-    setUploadProgress(0);
-  };
-
-  const FileUploadInput = ({
-    label,
-    accept,
-    media,
-    setMedia,
-  }: {
-    label: string;
-    accept: string;
-    media: MediaFile;
-    setMedia: React.Dispatch<React.SetStateAction<MediaFile>>;
-  }) => (
-    <div className="space-y-2">
-      <Label>{label}</Label>
-      <Input
-        required
-        type="file"
-        accept={accept}
-        disabled={isSubmitting}
-        onChange={(e) => handleFileChange(e.target.files?.[0], setMedia)}
-      />
-      {media.url && (
-        media.file?.type.startsWith("video/") ? (
-          <video src={media.url} controls className="aspect-video w-full rounded-md" />
-        ) : (
-          <img src={media.url} className="aspect-video w-full rounded-md" alt="Preview" />
-        )
-      )}
-    </div>
-  );
-
+    setVidFile(null);
+    setVidUrl(undefined);
+    setThumbnail(null);
+    setThumbnailUrl(undefined);
+    toast({ title: "SUCEESS", description: "Video published" });
+  }
   return (
-    <section className="container mx-auto px-4 py-8">
-      <form onSubmit={handleSubmit(handlePublish)} className="max-w-2xl space-y-4">
-        <FileUploadInput
-          label="Select Video"
+    <section>
+      <form onSubmit={handleSubmit(handlePublish)} className="space-y-2 w-1/2">
+        <Label htmlFor="videofile">Select Video</Label>
+        <Input
+          required
+          type="file"
           accept="video/*"
-          media={video}
-          setMedia={setVideo}
+          disabled={isSubmitting}
+          onChange={(e) => {
+            if (e.target.files) {
+              setVidFile(e.target.files[0]);
+              setVidUrl(URL.createObjectURL(e.target.files[0]));
+            }
+          }}
         />
-
-        <FileUploadInput
-          label="Select Thumbnail"
+        {vidUrl && (
+          <video
+            src={vidUrl}
+            controls
+            className="aspect-video w-full rounded-md"
+          />
+        )}
+        <Label htmlFor="thumbnailfile">Select thumbnail</Label>
+        <Input
+          required
+          type="file"
           accept="image/*"
-          media={thumbnail}
-          setMedia={setThumbnail}
+          disabled={isSubmitting}
+          onChange={(e) => {
+            if (e.target.files) {
+              setThumbnail(e.target.files?.[0]);
+              setThumbnailUrl(URL.createObjectURL(e.target.files?.[0] as File));
+            }
+          }}
         />
-
-        <div className="space-y-2">
-          <Input
-            {...register("title", { required: "Title is required" })}
-            placeholder="Video title"
-            disabled={isSubmitting}
-          />
-          {errors.title && <FormError message={errors.title.message} />}
-        </div>
-
-        <div className="space-y-2">
-          <Input
-            {...register("description", { required: "Description is required" })}
-            placeholder="Video description"
-            disabled={isSubmitting}
-          />
-          {errors.description && <FormError message={errors.description.message} />}
-        </div>
-
-        {isSubmitting && <Progress value={uploadProgress} className="my-4" />}
-
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? "Publishing..." : "Publish"}
-        </Button>
+        {thumbnailURL && (
+          <img src={thumbnailURL} className="aspect-video w-full rounded-md" />
+        )}
+        <Input
+          {...register("title", { required: "title can't be empty" })}
+          type="text"
+          placeholder="video title"
+          disabled={isSubmitting}
+        />
+        {errors.title && (
+          <p className="text-xs text-destructive">{errors.title.message}</p>
+        )}
+        <Input
+          {...register("description", {
+            required: "description   can't be empty",
+          })}
+          type="text"
+          placeholder="vidoe description"
+          disabled={isSubmitting}
+        />
+        {errors.description && (
+          <p className="text-xs text-destructive">
+            {errors.description.message}
+          </p>
+        )}
+        <Button type="submit">publish</Button>
       </form>
+      {isSubmitting && <Progress className="my-4" value={progress} />}
     </section>
   );
 }
-
-const FormError = ({ message }: { message?: string }) => (
-  <p className="text-xs text-destructive">{message}</p>
-);

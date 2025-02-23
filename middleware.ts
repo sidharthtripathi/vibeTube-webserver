@@ -20,3 +20,7 @@ export async function middleware(request: NextRequest) {
     });
   }
 }
+
+export const config = {
+  matcher: ['/api/:path+','/channels/:path*','/playlist/:path*','/subscriptions/:path*','/upload/:path*','/videos/:path*','/']
+}
