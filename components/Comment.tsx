@@ -6,6 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { useForm } from "react-hook-form";
 import { timeAgo } from "@/lib/time";
 import { useState } from "react";
+import { Input } from "./ui/input";
 
 type CommentFormProps = {
   userAvatar: string;
@@ -59,7 +60,7 @@ export function CommentForm({
             className="w-full"
             {...register("comment", { required: true })}
           />
-          <Button size={"sm"} className="self-end" disabled={isSubmitting}>
+          <Button className="self-end" disabled={isSubmitting}>
             Submit
           </Button>
         </form>
@@ -99,7 +100,9 @@ export function Comment({
   time,
   replyCount,
   comment,
+  id,
 }: CommentProp) {
+  const [replyEnabled, toggleReply] = useState(false);
   return (
     <div className="p-2">
       <div className="flex gap-3 items-start">
@@ -107,19 +110,43 @@ export function Comment({
           <AvatarFallback>{username.slice(0, 2).toUpperCase()}</AvatarFallback>
           <AvatarImage src={userAvatar} />
         </Avatar>
-        <div>
+        <div className="flex flex-col grow">
           <p>
             <span className="text-sm">@{username}</span>{" "}
             <span className="text-xs text-muted-foreground">
               {timeAgo.format(time)}
             </span>
           </p>
-          <p>{comment}</p>
+          <p className="text-sm">{comment}</p>
+
+          <Button
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => {
+              toggleReply((p) => !p);
+            }}
+            className="self-end"
+          >
+            reply
+          </Button>
+          {replyEnabled && <ReplyForm commentId={id} />}
         </div>
       </div>
+
       {replyCount > 0 && (
         <div className="ml-4 mt-4">fetch replies here then</div>
       )}
     </div>
+  );
+}
+
+function ReplyForm({ commentId }: { commentId: string }) {
+  return (
+    <form className="flex flex-col gap-2 p-2">
+      <Input placeholder="Add a reply" />
+      <Button variant={"secondary"} size={"sm"}  className="self-end text-xs">
+        submit
+      </Button>
+    </form>
   );
 }
