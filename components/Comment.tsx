@@ -1,12 +1,18 @@
 "use client";
-import { addComment } from "@/app/actions/comments";
+import { addComment, addReply, getReplies } from "@/app/actions/comments";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useForm } from "react-hook-form";
 import { timeAgo } from "@/lib/time";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
+import { Accordion } from "@radix-ui/react-accordion";
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 
 type CommentFormProps = {
   userAvatar: string;
@@ -129,24 +135,112 @@ export function Comment({
           >
             reply
           </Button>
-          {replyEnabled && <ReplyForm commentId={id} />}
+          {replyEnabled && (
+            <div>
+              <ReplyForm commentId={id} />
+              {replyCount > 0 && (
+                <Accordion type="single" collapsible className="w-fit">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>replies</AccordionTrigger>
+                    <AccordionContent>
+                      <RepliesList commentId={id} />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )}
+            </div>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
 
-      {replyCount > 0 && (
-        <div className="ml-4 mt-4">fetch replies here then</div>
+function RepliesList({ commentId }: { commentId: string }) {
+  const [replies, setReplies] = useState<CommentProp[]>([]);
+  useEffect(() => {
+    async function fetchReplies() {
+      const replies = await getReplies(commentId);
+      const replyArr: CommentProp[] = replies.map((reply) => ({
+        userAvatar: reply.author.avatar!,
+        username: reply.author.username,
+        id: reply.id,
+        time: reply.createdAt,
+        comment: reply.comment,
+        replyCount: reply.replyCount,
+      }));
+      setReplies(replyArr);
+    }
+    fetchReplies();
+  }, [commentId]);
+  return (
+    <div>
+      {replies.map(
+        ({ comment, id, replyCount, time, userAvatar, username }) => (
+          <Comment
+            comment={comment}
+            replyCount={replyCount}
+            id={id}
+            key={id}
+            time={time}
+            userAvatar={userAvatar}
+            username={username}
+          />
+        )
       )}
     </div>
   );
 }
 
+type ReplyForm = { reply: string };
 function ReplyForm({ commentId }: { commentId: string }) {
+  const [replies, setReplies] = useState<CommentProp[]>([]);
+  const { register, handleSubmit, reset } = useForm<ReplyForm>();
+  async function postReply(data: ReplyForm) {
+    const id = await addReply(data.reply, commentId);
+
+    setReplies((p) => [
+      ...p,
+      {
+        comment: data.reply,
+        id,
+        replyCount: 0,
+        time: new Date(),
+        username: "osdf",
+        userAvatar: "asd",
+      },
+    ]);
+    reset();
+  }
   return (
-    <form className="flex flex-col gap-2 p-2">
-      <Input placeholder="Add a reply" />
-      <Button variant={"secondary"} size={"sm"}  className="self-end text-xs">
-        submit
-      </Button>
-    </form>
+    <div>
+      <form
+        onSubmit={handleSubmit(postReply)}
+        className="flex flex-col gap-2 p-2"
+      >
+        <Input
+          placeholder="Add a reply"
+          {...register("reply", { required: true })}
+        />
+        <Button variant={"secondary"} size={"sm"} className="self-end text-xs">
+          submit
+        </Button>
+      </form>
+      <div>
+        {replies.map(
+          ({ comment, id, replyCount, time, userAvatar, username }) => (
+            <Comment
+              comment={comment}
+              id={id}
+              replyCount={replyCount}
+              time={time}
+              userAvatar={userAvatar}
+              username={username}
+              key={id}
+            />
+          )
+        )}
+      </div>
+    </div>
   );
 }

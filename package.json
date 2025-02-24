@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:docker":"docker build -t yt-webserver:latest .",
+    "build:docker": "docker build -t yt-webserver:latest .",
     "start": "npm run db:init && next start",
-    "db:init" : "npx prisma db push",
+    "db:init": "npx prisma db push",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@hookform/resolvers": "^4.1.0",
     "@prisma/client": "^6.3.1",
+    "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
