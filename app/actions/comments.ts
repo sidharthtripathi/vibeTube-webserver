@@ -26,7 +26,7 @@ export async function addReply(reply:string,commentId : string){
         const res = await prisma.$transaction([
             prisma.comment.create({
                 data :{comment:reply,authorId:userId,commentId},
-                select : {id:true},
+                select : {id:true,author : {select : {avatar:true,username:true}}},
             }),
             prisma.comment.update({
                 data : {replyCount : {increment : 1}},
@@ -34,7 +34,7 @@ export async function addReply(reply:string,commentId : string){
                 select : {id:true}
             })
         ])
-        if(res[0].id) return res[0].id
+        if(res[0].id) return {id:res[0].id,username:res[0].author.username,avatar:res[0].author.avatar}
         else throw new Error("something went wrong")
         
     } catch (error) {

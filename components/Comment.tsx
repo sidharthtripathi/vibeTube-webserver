@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { toast, useToast } from "@/hooks/use-toast";
 
 type CommentFormProps = {
   userAvatar: string;
@@ -157,6 +158,7 @@ export function Comment({
 }
 
 function RepliesList({ commentId }: { commentId: string }) {
+  const {toast} = useToast()
   const [replies, setReplies] = useState<CommentProp[]>([]);
   useEffect(() => {
     async function fetchReplies() {
@@ -197,19 +199,23 @@ function ReplyForm({ commentId }: { commentId: string }) {
   const [replies, setReplies] = useState<CommentProp[]>([]);
   const { register, handleSubmit, reset } = useForm<ReplyForm>();
   async function postReply(data: ReplyForm) {
-    const id = await addReply(data.reply, commentId);
-
-    setReplies((p) => [
-      ...p,
-      {
-        comment: data.reply,
-        id,
-        replyCount: 0,
-        time: new Date(),
-        username: "osdf",
-        userAvatar: "asd",
-      },
-    ]);
+    try {
+      const {id,avatar,username} = await addReply(data.reply, commentId);
+  
+      setReplies((p) => [
+        ...p,
+        {
+          comment: data.reply,
+          id,
+          replyCount: 0,
+          time: new Date(),
+          username,
+          userAvatar: avatar!,
+        },
+      ]);
+    } catch (error) {
+      toast({value :"Login first",variant : "destructive"})
+    }
     reset();
   }
   return (
