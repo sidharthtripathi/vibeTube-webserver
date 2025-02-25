@@ -10,11 +10,12 @@ import { MountainIcon } from "@/components/ui/MountainIcon";
 import { Toaster } from "@/components/ui/toaster";
 import { SearchBox } from "@/components/ui/SearchBox";
 import { headers } from "next/headers";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 
 export const metadata: Metadata = {
-  title: "Youtube",
+  title: "VibeTube",
   description: "Youtube like app built using NextJS",
 };
 
@@ -26,6 +27,14 @@ export default function RootLayout({
   const username = headers().get("username")
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+      </Head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark">
         <section className="container mx-auto">
