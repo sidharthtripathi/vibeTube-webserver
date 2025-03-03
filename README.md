@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# VibeTube Project Setup Guide
 
-## Getting Started
+This document outlines the steps required to set up and run the VibeTube project locally.
 
-First, run the development server:
+## Project Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The following diagram illustrates the project's architecture:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![VibeTube Architecture](architecture.png)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The VibeTube project consists of two main components: the Next.js webserver and the HLS transcoder.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Prerequisites
 
-## Learn More
+* **Git:** Ensure Git is installed on your system.
+* **Node.js and npm:** Node.js and npm are required for dependency management and running scripts.
+* **PostgreSQL:** A running instance of PostgreSQL is required.
+* **Docker (Optional):** Docker is required if you intend to build the Docker image.
 
-To learn more about Next.js, take a look at the following resources:
+## Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Clone the Repositories
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1.  **Clone the Next.js Webserver:**
 
-## Deploy on Vercel
+    ```bash
+    git clone https://github.com/sidharthtripathi/youtube-nextjs-webserver](https://github.com/sidharthtripathi/youtube-nextjs-webserver
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  **Clone the HLS Transcoder:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```bash
+    git clone https://github.com/sidharthtripathi/hls-yt
+    ```
+
+### 2. Setup the HLS Transcoder
+
+* Follow the setup instructions provided in the HLS Transcoder repository's README: [https://github.com/sidharthtripathi/hls-yt](https://github.com/sidharthtripathi/hls-yt)
+
+### 3. Setup the Next.js Webserver
+
+1.  **Navigate to the Webserver Directory:**
+
+    ```bash
+    cd youtube-nextjs-webserver
+    ```
+
+2.  **Configure Environment Variables:**
+
+    * Copy the `.env.example` file to `.env`.
+    * Modify the `.env` file with the appropriate values for your environment, including database connection details.
+
+3.  **Install Dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+4.  **Initialize the PostgreSQL Database:**
+
+    * Ensure your PostgreSQL database is running.
+    * Run the database initialization script:
+
+        ```bash
+        npm run db:init
+        ```
+
+5.  **Start the Development Server:**
+
+    ```bash
+    npm run dev
+    ```
+
+    This command starts the Next.js development server.
+
+### 4. Build Docker Image (Optional)
+
+* If you intend to use Docker Compose or deploy the webserver in a Docker container, you can build the Docker image:
+
+    ```bash
+    npm run build:docker
+    ```
+
+    This will create a Docker image of the Next.js webserver.
