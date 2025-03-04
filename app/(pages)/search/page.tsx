@@ -1,11 +1,14 @@
 
 import { VideoCard } from "@/components/ui/VideoCard"
+import { meilisearch } from "@/lib/meilisearch"
 import { prisma } from "@/lib/prisma"
 export default async function Search(req : {searchParams : Record<string,string>}) {
   
     const q = req.searchParams.q
+    const results = await meilisearch.index("videos").search(q)
+    const ids = results.hits.map(result=>(result.id)) as string[]
     const videos = await prisma.video.findMany({
-      where : {OR : [{title : {contains : q},isPublished : true},{description : {contains : q},isPublished : true}]},
+      where : {id : {in : ids},isPublished : true},
       select : {
         thumbnailUrl : true,
         duration : true,
