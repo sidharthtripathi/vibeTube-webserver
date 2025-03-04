@@ -2,6 +2,7 @@
 import { VideoCard } from "@/components/ui/VideoCard"
 import { prisma } from "@/lib/prisma"
 export default async function Component() {
+
   const videos = await prisma.video.findMany({
     where : {isPublished : true},
     orderBy : {createdAt : "desc"},
@@ -18,6 +19,7 @@ export default async function Component() {
     }
 
   })
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4" >
       {
