@@ -6,7 +6,7 @@ import format from 'format-duration'
 export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id,duration} : {duration : number,thumbnailUrl:string,title:string,views:number,createdAt:Date,username:string,avatar:string |null,id:string}){
     return (
         <div className="p-2">
-        <div className="relative">
+        <Link href={`/videos/${id}`} className="relative">
           <Image
             src={thumbnailUrl}
             alt="Thumbnail"
@@ -15,7 +15,7 @@ export function VideoCard({thumbnailUrl,title,username,avatar,views,createdAt,id
             className="aspect-video rounded-md w-full"
           />
           <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded-md">{format(duration*1000)}</div>
-        </div>
+        </Link>
         <div className="mt-2 flex items-start gap-4">
             <Avatar>
               <AvatarImage src={avatar!} className="rounded-full size-10 object-cover" />

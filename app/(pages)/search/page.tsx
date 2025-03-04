@@ -5,7 +5,7 @@ export default async function Search(req : {searchParams : Record<string,string>
   
     const q = req.searchParams.q
     const videos = await prisma.video.findMany({
-      where : {OR : [{title : {contains : q}},{description : {contains : q}}]},
+      where : {OR : [{title : {contains : q},isPublished : true},{description : {contains : q},isPublished : true}]},
       select : {
         thumbnailUrl : true,
         duration : true,
