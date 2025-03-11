@@ -10,8 +10,11 @@ import { server } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { userState } from "@/state/userState";
 type LoginForm = z.infer<typeof loginSchema>;
 export function LoginForm() {
+  const setUser = useSetRecoilState(userState)
   const router = useRouter();
   const { toast } = useToast();
   const {
@@ -23,7 +26,8 @@ export function LoginForm() {
   });
   async function handleLogin({ username, password }: LoginForm) {
     try {
-      await server.post("/api/login", { username, password });
+      const {data} = await server.post("/api/login", { username, password });
+      setUser({id:data.id,username:data.username})
       router.push("/");
     } catch (error) {
       if (error instanceof AxiosError) {
