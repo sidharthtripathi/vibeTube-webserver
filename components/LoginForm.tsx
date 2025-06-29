@@ -23,7 +23,7 @@ export function LoginForm() {
     formState: { isSubmitting, errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues : {username:"sidharth",password :"12341234"}
+    
   });
   async function handleLogin({ username, password }: LoginForm) {
     try {

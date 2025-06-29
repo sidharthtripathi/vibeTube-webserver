@@ -12,8 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/LoginForm";
 import { SignupForm } from "@/components/SignupForm";
 import { useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
 export default function Join() {
   const [isLogin, setIsLogin] = useState(true);
   return (
@@ -56,11 +54,7 @@ export default function Join() {
             </Button>
           </p>
         </CardFooter>
-        <Alert>
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Demo Account Credentials are already filled</AlertTitle>
-          
-        </Alert>
+        
       </Card>
     </div>
   );
