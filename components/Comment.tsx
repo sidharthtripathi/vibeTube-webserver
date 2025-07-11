@@ -14,6 +14,8 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { toast, useToast } from "@/hooks/use-toast";
+import { useRecoilValue } from "recoil";
+import { userState } from "@/state/userState";
 
 type CommentFormProps = {
   userAvatar: string;
@@ -28,6 +30,7 @@ export function CommentForm({
   username,
   videoId,
 }: CommentFormProps) {
+  const loggedinUser = useRecoilValue(userState)
   const [comments, setComments] = useState<CommentProp[]>([]);
   const {
     register,
@@ -45,7 +48,7 @@ export function CommentForm({
         replyCount: 0,
         time: new Date(),
         userAvatar: "someavatar",
-        username: "someusername",
+        username: loggedinUser==null ? "username" : loggedinUser.username,
         id,
       },
     ]);
