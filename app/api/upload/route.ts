@@ -1,4 +1,3 @@
-import { meilisearch } from "@/lib/meilisearch"
 import { prisma } from "@/lib/prisma"
 import { sendToQueue } from "@/lib/rabbitmq"
 import { getPutSignedURL } from "@/lib/s3"
@@ -25,7 +24,6 @@ export async function POST(req : NextRequest){
     const video = await prisma.video.create({
         data : {id,title,description,thumbnailUrl,rawVideoUrl,hlsVideoUrl,uploader:{connect : {username}}}
     })
-    await meilisearch.index("videos").addDocuments([{id:video.id,title : video.title,description : video.description}])
     await sendToQueue({rawVideoUrl,id})
     return NextResponse.json(video)
 }
